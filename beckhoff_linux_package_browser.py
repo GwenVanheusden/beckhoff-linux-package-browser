@@ -498,7 +498,7 @@ class Handler(BaseHTTPRequestHandler):
 
             # Count packages
             count = content.count('\nPackage:') + (1 if content.startswith('Package:') else 0)
-            print(f"  ✓ {count} packages ontofgen", flush=True)
+            print(f"  ✓ {count} packages received", flush=True)
             self._send_json({'content': content, 'packages_count': count})
 
         except HTTPError as e:
