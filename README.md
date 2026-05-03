@@ -1,4 +1,4 @@
-# beckhoff-linux-package-analyzer
+# beckhoff-linux-package-browser
 Beckhoff offers PLC's with Linux Kernel (eg. CX9240 or CX82xx) and uses a package server to install several TwinCAT functions.
 But without a real PLC it's cumbursome to see available packages along with de different versions. Beckhoff also uses a stable feed and testing/outdated feed.
 
