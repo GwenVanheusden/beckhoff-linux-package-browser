@@ -1,6 +1,6 @@
 # beckhoff-linux-package-browser
-Beckhoff offers PLC's with Linux Kernel (eg. CX9240 or CX82xx) and uses a package server to install several TwinCAT functions.
-But without a real PLC it's cumbursome to see available packages along with de different versions.
+Beckhoff offers PLC's with Linux Kernel (eg. CX9240 or CX82x0) and uses a package server to install several TwinCAT functions.
+But without a real PLC it's cumbersome to see available packages along with de different versions.
 
 This tool is generated with Clause Sonnet 4.6. It's a python script which you can run locally. It runs a local webserver and automatically opens a webpage.
 Here you can enter your Beckhoff credentials and select the stable/testing feed and select your platform amd64/arm64 (or you can upload the package list downloaded from deb.beckhoff.com).
