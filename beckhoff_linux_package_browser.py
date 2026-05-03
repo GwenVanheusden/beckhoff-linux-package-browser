@@ -135,7 +135,7 @@ HTML = r"""<!DOCTYPE html>
     </div>
     <div class="logo-text">
       <h1>Beckhoff Package Browser</h1>
-      <p>deb.beckhoff.com — via lokale Python proxy</p>
+      <p>deb.beckhoff.com — via local Python proxy</p>
     </div>
   </div>
   <div class="platform-badge" id="platform-label">ARM64</div>
@@ -144,19 +144,19 @@ HTML = r"""<!DOCTYPE html>
 <!-- LOGIN -->
 <div id="login-section">
   <div class="panel">
-    <h2>Verbinden met package server</h2>
-    <p class="sub">Vul je Beckhoff-accountgegevens in. De Python server haalt het bestand op en geeft het door aan de browser — geen CORS-problemen.</p>
+    <h2>Connect to package server</h2>
+    <p class="sub">Enter your Beckhoff account credentials.</p>
     <div class="field">
-      <label>Gebruikersnaam</label>
-      <input type="text" id="inp-user" placeholder="gebruikersnaam" autocomplete="username">
+      <label>Username</label>
+      <input type="text" id="inp-user" placeholder="username" autocomplete="username">
     </div>
     <div class="field">
-      <label>Wachtwoord</label>
+      <label>Password</label>
       <input type="password" id="inp-pass" placeholder="••••••••" autocomplete="current-password">
     </div>
     <div class="row2">
       <div class="field">
-        <label>Distributie</label>
+        <label>Distribution</label>
         <select id="inp-dist">
           <option value="trixie-stable">trixie-stable</option>
           <option value="trixie-testing">trixie-testing</option>
@@ -164,7 +164,7 @@ HTML = r"""<!DOCTYPE html>
         </select>
       </div>
       <div class="field">
-        <label>Architectuur</label>
+        <label>Architecture</label>
         <select id="inp-arch">
           <option value="binary-arm64">arm64</option>
           <option value="binary-amd64">amd64</option>
@@ -174,13 +174,13 @@ HTML = r"""<!DOCTYPE html>
     </div>
     <button class="btn-primary" id="btn-fetch" onclick="fetchPackages()">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M8 12l4 4 4-4M12 4v12"/></svg>
-      Ophalen van server
+      Fetch from server
     </button>
     <div id="status-box"></div>
-    <div class="divider">of laad lokaal bestand</div>
+    <div class="divider">or load local file</div>
     <div class="upload-alt" id="dropzone">
       <input type="file" id="file-input" accept=".txt,.gz,text/*">
-      <p><strong>Sleep Packages-bestand</strong> hierop, of klik om te bladeren</p>
+      <p><strong>Drop Packages file</strong> here, or click to browse</p>
     </div>
   </div>
 </div>
@@ -190,34 +190,34 @@ HTML = r"""<!DOCTYPE html>
   <div class="toolbar">
     <div class="search-wrap">
       <svg viewBox="0 0 24 24"><path d="M10 2a8 8 0 105.293 14.293l4.707 4.707 1.414-1.414-4.707-4.707A8 8 0 0010 2zm0 2a6 6 0 110 12A6 6 0 0110 4z"/></svg>
-      <input type="text" id="search" placeholder="Zoeken op naam of beschrijving…" oninput="render()">
+      <input type="text" id="search" placeholder="Search by name or description…" oninput="render()">
     </div>
-    <select id="filter-section" onchange="render()"><option value="">Alle secties</option></select>
-    <select id="filter-arch-tbl" onchange="render()"><option value="">Alle architecturen</option></select>
+    <select id="filter-section" onchange="render()"><option value="">All sections</option></select>
+    <select id="filter-arch-tbl" onchange="render()"><option value="">All architectures</option></select>
     <select id="sort-by" onchange="render()">
-      <option value="name">Sorteren: Naam</option>
-      <option value="version">Sorteren: Versie</option>
-      <option value="section">Sorteren: Sectie</option>
-      <option value="size">Sorteren: Grootte</option>
+      <option value="name">Sort: Name</option>
+      <option value="version">Sort: Version</option>
+      <option value="section">Sort: Section</option>
+      <option value="size">Sort: Size</option>
     </select>
-    <button class="btn-logout" onclick="logout()">↩ Nieuw bestand</button>
+    <button class="btn-logout" onclick="logout()">↩ New file</button>
   </div>
   <div class="stats-bar" id="stats-bar"></div>
   <div class="table-container">
     <table>
       <thead>
         <tr>
-          <th class="col-pkg sorted" onclick="setSort('name')">Pakket <span class="sort-arrow" id="arr-name">▲</span></th>
-          <th class="col-ver" onclick="setSort('version')">Versie <span class="sort-arrow" id="arr-version">▲</span></th>
-          <th class="col-sec" onclick="setSort('section')">Sectie <span class="sort-arrow" id="arr-section">▲</span></th>
+          <th class="col-pkg sorted" onclick="setSort('name')">Package <span class="sort-arrow" id="arr-name">▲</span></th>
+          <th class="col-ver" onclick="setSort('version')">Version <span class="sort-arrow" id="arr-version">▲</span></th>
+          <th class="col-sec" onclick="setSort('section')">Section <span class="sort-arrow" id="arr-section">▲</span></th>
           <th class="col-arch">Arch.</th>
-          <th class="col-size" onclick="setSort('size')">Grootte <span class="sort-arrow" id="arr-size">▲</span></th>
-          <th class="col-desc">Beschrijving</th>
+          <th class="col-size" onclick="setSort('size')">Size <span class="sort-arrow" id="arr-size">▲</span></th>
+          <th class="col-desc">Description</th>
         </tr>
       </thead>
       <tbody id="tbody"></tbody>
     </table>
-    <div id="no-results" class="no-results" style="display:none">Geen resultaten gevonden.</div>
+    <div id="no-results" class="no-results" style="display:none">No results found.</div>
   </div>
 </div>
 
@@ -244,15 +244,19 @@ async function fetchPackages(){
   const pass=document.getElementById('inp-pass').value;
   const dist=document.getElementById('inp-dist').value;
   const arch=document.getElementById('inp-arch').value;
-  if(!user||!pass){showStatus('Vul gebruikersnaam en wachtwoord in.','error');return}
+  if(!user||!pass){showStatus('Vul username en wachtwoord in.','error');return}
 
   const btn=document.getElementById('btn-fetch');
   btn.disabled=true;
-  btn.innerHTML='<span class="spinner"></span> Ophalen…';
-  showStatus('Verbinden met deb.beckhoff.com…','info');
+  btn.innerHTML='<span class="spinner"></span> Fetching…';
+  showStatus('Connecting to deb.beckhoff.com…','info');
 
   try{
-    const resp=await fetch(`/fetch?user=${encodeURIComponent(user)}&pass=${encodeURIComponent(pass)}&dist=${encodeURIComponent(dist)}&arch=${encodeURIComponent(arch)}`);
+    const resp=await fetch('/fetch',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({user,pass,dist,arch})
+    });
     const data=await resp.json();
 
     if(!resp.ok||data.error){
@@ -262,14 +266,14 @@ async function fetchPackages(){
 
     const archLabel=arch.replace('binary-','').toUpperCase();
     document.getElementById('platform-label').textContent=archLabel+' · '+dist;
-    showStatus('✓ '+data.packages_count+' pakketten opgehaald!','success');
+    showStatus('✓ '+data.packages_count+' packages fetched!','success');
     setTimeout(()=>parsePackages(data.content),400);
 
   }catch(err){
-    showStatus('❌ Kon de Python server niet bereiken: '+err.message,'error');
+    showStatus('❌ Could not reach the Python server: '+err.message,'error');
   }finally{
     btn.disabled=false;
-    btn.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M8 12l4 4 4-4M12 4v12"/></svg> Ophalen van server';
+    btn.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M8 12l4 4 4-4M12 4v12"/></svg> Fetch from server';
   }
 }
 
@@ -301,11 +305,11 @@ function parsePackages(text){
   const archs=[...new Set(packages.map(p=>p.architecture).filter(Boolean))].sort();
 
   const ss=document.getElementById('filter-section');
-  ss.innerHTML='<option value="">Alle secties</option>';
+  ss.innerHTML='<option value="">All sections</option>';
   sections.forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;ss.appendChild(o)});
 
   const as=document.getElementById('filter-arch-tbl');
-  as.innerHTML='<option value="">Alle architecturen</option>';
+  as.innerHTML='<option value="">All architectures</option>';
   archs.forEach(a=>{const o=document.createElement('option');o.value=a;o.textContent=a;as.appendChild(o)});
 
   document.getElementById('login-section').style.display='none';
@@ -366,9 +370,9 @@ function render(){
   document.getElementById('no-results').style.display=filtered.length===0?'block':'none';
 
   document.getElementById('stats-bar').innerHTML=
-    `<span class="stat"><strong>${filtered.length}</strong> van <strong>${packages.length}</strong> pakketten</span>
+    `<span class="stat"><strong>${filtered.length}</strong> of <strong>${packages.length}</strong> packages</span>
      <span class="stat-sep">·</span>
-     <span class="stat"><strong>${new Set(filtered.map(p=>p.section).filter(Boolean)).size}</strong> secties</span>`;
+     <span class="stat"><strong>${new Set(filtered.map(p=>p.section).filter(Boolean)).size}</strong> sections</span>`;
 
   filtered.forEach(p=>{
     const tr=document.createElement('tr');
@@ -432,42 +436,48 @@ class Handler(BaseHTTPRequestHandler):
             print(f"  {args[0]}  {args[1]}", flush=True)
 
     def do_GET(self):
-        parsed = urlparse(self.path)
-
-        if parsed.path == '/':
+        if urlparse(self.path).path == '/':
             self._send_html(HTML.encode())
+        else:
+            self._send_json({'error': 'Not found'}, 404)
 
-        elif parsed.path == '/fetch':
-            self._handle_fetch(parsed.query)
-
+    def do_POST(self):
+        if urlparse(self.path).path == '/fetch':
+            length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(length)
+            try:
+                params = json.loads(body)
+            except Exception:
+                self._send_json({'error': 'Invalid request.'}, 400)
+                return
+            self._handle_fetch(params)
         else:
             self._send_json({'error': 'Not found'}, 404)
 
     # ── proxy fetch ──────────────────────────────────────────────────────────
 
-    def _handle_fetch(self, query_string):
-        params = parse_qs(query_string)
-        user = params.get('user', [''])[0]
-        pw   = params.get('pass', [''])[0]
-        dist = params.get('dist', ['trixie-stable'])[0]
-        arch = params.get('arch', ['binary-arm64'])[0]
+    def _handle_fetch(self, params):
+        user = params.get('user', '').strip()
+        pw   = params.get('pass', '')
+        dist = params.get('dist', 'trixie-stable')
+        arch = params.get('arch', 'binary-arm64')
 
         # Basic input validation
         if not user or not pw:
-            self._send_json({'error': 'Gebruikersnaam en wachtwoord zijn verplicht.'}, 400)
+            self._send_json({'error': 'Username en wachtwoord zijn verplicht.'}, 400)
             return
 
         # Whitelist allowed values to prevent path traversal
         allowed_dists = {'trixie-stable', 'trixie-testing', 'bookworm-stable'}
         allowed_archs = {'binary-arm64', 'binary-amd64', 'binary-all'}
         if dist not in allowed_dists or arch not in allowed_archs:
-            self._send_json({'error': 'Ongeldige distributie of architectuur.'}, 400)
+            self._send_json({'error': 'Invalid distribution or architecture.'}, 400)
             return
 
         url = f'https://deb.beckhoff.com/debian/dists/{dist}/main/{arch}/Packages'
         credentials = base64.b64encode(f'{user}:{pw}'.encode()).decode()
 
-        print(f"\n  → Ophalen: {url}", flush=True)
+        print(f"\n  → Fetching: {url}", flush=True)
 
         try:
             req = Request(url, headers={
@@ -483,32 +493,32 @@ class Handler(BaseHTTPRequestHandler):
                 content = raw.decode('utf-8', errors='replace')
 
             if 'Package:' not in content:
-                self._send_json({'error': 'Onverwacht antwoord van de server — geen geldig Packages-bestand.'}, 502)
+                self._send_json({'error': 'Unexpected response from server — not a valid Packages file.'}, 502)
                 return
 
             # Count packages
             count = content.count('\nPackage:') + (1 if content.startswith('Package:') else 0)
-            print(f"  ✓ {count} pakketten ontvangen", flush=True)
+            print(f"  ✓ {count} packages ontofgen", flush=True)
             self._send_json({'content': content, 'packages_count': count})
 
         except HTTPError as e:
             if e.code == 401:
-                self._send_json({'error': 'Authenticatie mislukt (401). Controleer gebruikersnaam en wachtwoord.'}, 401)
+                self._send_json({'error': 'Authenticatie mislukt (401). Controleer username en wachtwoord.'}, 401)
             elif e.code == 403:
-                self._send_json({'error': f'Toegang geweigerd (403). Je account heeft mogelijk geen toegang tot {dist}/{arch}.'}, 403)
+                self._send_json({'error': f'Access denied (403). Your account may not have access to {dist}/{arch}.'}, 403)
             elif e.code == 404:
-                self._send_json({'error': f'Bestand niet gevonden (404). Controleer distributie en architectuur: {dist}/{arch}.'}, 404)
+                self._send_json({'error': f'File not found (404). Check distribution and architecture: {dist}/{arch}.'}, 404)
             else:
                 self._send_json({'error': f'HTTP fout {e.code}: {e.reason}'}, 502)
 
         except URLError as e:
-            self._send_json({'error': f'Netwerkfout: {e.reason}. Controleer je internetverbinding.'}, 502)
+            self._send_json({'error': f'Network error: {e.reason}. Check your internet connection.'}, 502)
 
         except TimeoutError:
-            self._send_json({'error': 'Timeout — de server reageert niet. Probeer opnieuw.'}, 504)
+            self._send_json({'error': 'Timeout — the server is not responding. Please try again.'}, 504)
 
         except Exception as e:
-            self._send_json({'error': f'Onverwachte fout: {e}'}, 500)
+            self._send_json({'error': f'Unexpected error: {e}'}, 500)
 
     # ── helpers ──────────────────────────────────────────────────────────────
 
@@ -553,7 +563,7 @@ def main():
     try:
         server.serve_forever()
     except KeyboardInterrupt:
-        print('\n  Server gestopt.', flush=True)
+        print('\n  Server stopped.', flush=True)
         server.server_close()
 
 
