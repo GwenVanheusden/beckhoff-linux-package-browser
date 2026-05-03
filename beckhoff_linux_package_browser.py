@@ -549,7 +549,7 @@ def main():
   ║     Beckhoff Package Browser                 ║
   ╠══════════════════════════════════════════════╣
   ║  Open in browser:  {url:<26}║
-  ║  Stoppen:          Ctrl+C                    ║
+  ║  Stop:             Ctrl+C                    ║
   ╚══════════════════════════════════════════════╝
 """, flush=True)
 
